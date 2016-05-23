@@ -1,5 +1,4 @@
 
-PRICE_URL = "http://steamcommunity.com/market/priceoverview"
-AGENTS = "Mozilla/4.0 (Windows NT 6.1; Win64; x64)"
+ITEM_URL = "http://steamcommunity.com/market/priceoverview"
 COUNTRY = "FR"
 CURRENTY = 3

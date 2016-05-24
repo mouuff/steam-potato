@@ -23,7 +23,7 @@ def item(name, appid, country=COUNTRY, currency=CURRENTY):
 	'''
 	values = {
 	"country" : country,
-	"currenty" : str(currency),
+	"currency" : str(currency),
 	"appid" : str(appid),
 	"market_hash_name" : name,
 	"format" : "json"

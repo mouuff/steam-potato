@@ -7,7 +7,7 @@ def get_item_name(html):
 	'''
 	Get item name and appid
 	'''
-	expr = r"href=\"{market_url}/(.*?)/(.*?)\" id=\"resultlink_.\">"
+	expr = r"href=\"{market_url}/(.*?)/(.*?)\" id=\"resultlink_"
 	expr = expr.format(market_url=MARKET_URL)
 	appid, name = re.findall(expr, html)[0]
 	name = urllib.parse.unquote(name)

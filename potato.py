@@ -21,10 +21,10 @@ def test():
 	x = 0
 	while (x < STEP * 100):
 		try:
-			item_list_json = potato.load.item_list(x, STEP)
+			item_list = potato.load.item_list(x, STEP)
 			print("Loaded {x} items at {range}".format(x=STEP, range=x))
 			#print(item_list_json["results_html"])
-			item_list = potato.parse.item_list(item_list_json)
+			#item_list = potato.parse.item_list(item_list_json)
 			for item in item_list:
 				print(item)
 				if (get_price_diff(item) > 1):

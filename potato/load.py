@@ -2,6 +2,7 @@
 import urllib.parse
 import urllib.request
 import json
+import potato.parse
 from potato.constants import COUNTRY, CURRENTY, ITEM_URL, LIST_URL
 
 def request_json(link, values):
@@ -43,4 +44,5 @@ def item_list(start, count):
 	"format" : "json"
 	}
 	json_file = request_json(LIST_URL, values)
-	return (json_file)
+	result = potato.parse.item_list(json_file)
+	return (result)

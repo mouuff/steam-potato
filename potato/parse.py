@@ -3,6 +3,46 @@ import urllib.parse
 import re
 from potato.constants import MARKET_URL
 
+def get_item_name(html):
+	'''
+	Get item name and appid
+	'''
+	expr = r"href=\"{market_url}/(.*?)/(.*?)\" id=\"resultlink_.\">"
+	expr = expr.format(market_url=MARKET_URL)
+	appid, name = re.findall(expr, html)[0]
+	name = urllib.parse.unquote(name)
+	return (name, appid)
+
+def html_get_span(html, name):
+	'''
+	Get span from name
+	this function is used to get normal price, sale, price
+	'''
+	expr = r'<span class=\"{name}\">(.*?)</span>'.format(name=name)
+	span = re.findall(expr, html)
+	return (span[0])
+
+def html_item(html):
+	'''
+	Get item information from html
+	this function should be called after
+	potato.parse.item_list(json_list) function
+	returns a dictionary of containing item informations:
+	name, appid, normal_price, sale_price, quantity
+	'''
+	name, appid = get_item_name(html)
+	normal_price = html_get_span(html, "normal_price")
+	sale_price = html_get_span(html, "sale_price")
+	quantity = html_get_span(html, "market_listing_num_listings_qty")
+	info = {
+	"name" : name,
+	"appid" : appid,
+	"normal_price" : normal_price,
+	"sale_price" : sale_price,
+	"quantity" : quantity
+	}
+	return (info)
+
 def item_list(json_list):
 	'''
 	Converts a json list of items to a usable list
@@ -12,12 +52,8 @@ def item_list(json_list):
 	potato.parse.item_list(start, count)
 	'''
 	html = json_list["results_html"]
-	expr = r"href=\"{market_url}/(.*?)/(.*?)\" id=\"resultlink_.\">"
-	expr = expr.format(market_url=MARKET_URL)
-	regex = re.compile(expr)
-	item_tulpe = regex.findall(html)
-	item_list = []
-	for item in item_tulpe:
-		item_name = urllib.parse.unquote(item[1])
-		item_list.append([item_name, item[0]])
-	return (item_list)
+	html_classes = re.findall(r'<a ((.|\n)*?)</a>', html)
+	result = []
+	for html_class in html_classes:
+		result.append(html_item(html_class[0]))
+	return (result)

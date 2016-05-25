@@ -3,7 +3,7 @@ import urllib.parse
 import re
 from potato.constants import MARKET_URL
 
-def get_item_name(html):
+def item_name(html):
 	'''
 	Get item name and appid
 	'''
@@ -30,7 +30,7 @@ def html_item(html):
 	returns a dictionary of containing item informations:
 	name, appid, normal_price, sale_price, quantity
 	'''
-	name, appid = get_item_name(html)
+	name, appid = item_name(html)
 	normal_price = html_get_span(html, "normal_price")
 	sale_price = html_get_span(html, "sale_price")
 	quantity = html_get_span(html, "market_listing_num_listings_qty")

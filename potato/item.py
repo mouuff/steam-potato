@@ -2,8 +2,10 @@
 import urllib.parse
 import urllib.request
 import json
-import potato.parse
-from potato.constants import COUNTRY, CURRENTY, ITEM_URL, LIST_URL
+from .currency import Currency
+from .constants import *
+
+__all__ = ["load_price", "load_nameid"]
 
 
 def request_json(link, values):
@@ -17,14 +19,14 @@ def request_json(link, values):
     return (json_file)
 
 
-def item(name, appid, country=COUNTRY, currency=CURRENTY):
+def load_price(name, appid, country=COUNTRY, currency=CURRENCY):
     '''Returns basic item information by name and appid
     appid defines the name of steam game
     it is defined by APPS constant
     '''
     values = {
     "country": country,
-    "currency": str(currency),
+    "currency": str(currency.value),
     "appid": str(appid),
     "market_hash_name": name,
     "format": "json"
@@ -33,16 +35,11 @@ def item(name, appid, country=COUNTRY, currency=CURRENTY):
     return (json_file)
 
 
-def item_list(start, count):
-    '''Load item list
-    returns a json which contains list information
-    the actual list is stored in html
+def load_nameid(name, appid):
+    '''Get the nameid by name
+    nameid is useful for order requests
     '''
-    values = {
-    "start": str(start),
-    "count": str(count),
-    "format": "json"
-    }
-    json_file = request_json(LIST_URL, values)
-    result = potato.parse.item_list(json_file)
-    return (result)
+    url = "{url}/{appid}/{name}".format(url=MARKET_URL,
+                                        appid=appid,
+                                        name=name)
+    print(url)

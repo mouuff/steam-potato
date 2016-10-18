@@ -1,7 +1,10 @@
 
 import urllib.parse
 import re
-from potato.constants import MARKET_URL
+from .constants import *
+from .item import request_json
+
+__all__ = ["load"]
 
 
 def item_name(html):
@@ -44,7 +47,7 @@ def html_item(html):
     return (info)
 
 
-def item_list(json_list):
+def parse_item_list(json_list):
     '''Converts a json list of items to a usable list
     Steam API returns the list of items in a json which contains html
     The role of this function is to parse the html part
@@ -56,4 +59,19 @@ def item_list(json_list):
     result = []
     for html_class in html_classes:
         result.append(html_item(html_class[0]))
+    return (result)
+
+
+def load(start, count):
+    '''Load item list
+    returns a json which contains list information
+    the actual list is stored in html
+    '''
+    values = {
+    "start": str(start),
+    "count": str(count),
+    "format": "json"
+    }
+    json_file = request_json(LIST_URL, values)
+    result = parse_item_list(json_file)
     return (result)

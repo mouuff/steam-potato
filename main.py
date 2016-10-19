@@ -1,27 +1,29 @@
 #!/usr/bin/python3
 
 import potato.item
+import potato.list
 import urllib.error
 import time
 import re
 
 
-RUST = "252490"
-ITEMS = [
-    ("Reaper Note Pistol", RUST, 2.2),
-    ("Lawman", RUST, 3.4)
-]
-
-
-def reload_item(name, appid, target, debug=True):
+def reload_item(name, appid):
+    print("-" * 10)
+    print(name)
     nameid = potato.item.load_nameid(name, appid)
-    print(nameid)
-    potato.item.load_item_orders_histogram(nameid)
+    data = potato.item.load_item_orders_histogram(nameid)
+    lowest = float(data["lowest_sell_order"])
+    highest = float(data["highest_buy_order"])
+    print("price: " + str(lowest / 100))
+    print((lowest - highest) / 100)
+
 
 def main():
-    for item in ITEMS:
-        if (reload_item(*item)):
-            print("Match")
+    items = potato.list.load(10, 100)
+    for item in items:
+        reload_item(item["name"], item["appid"])
+        time.sleep(10)
+        # must wait to prevent ban
 
 
 if (__name__ == "__main__"):

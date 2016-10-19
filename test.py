@@ -30,12 +30,10 @@ class TestModule(unittest.TestCase):
             print("nameid : " + str(nameid))
             self.assertTrue(nameid == item[-1])
 
-"""
-def reload_item(name, appid, target, debug=True):
-    nameid = potato.item.load_nameid(name, appid)
-    print(nameid)
-    potato.item.load_item_orders_histogram(nameid)
-"""
+    def test_item_orders_histogram(self):
+        for item in ITEMS:
+            rep = potato.item.load_item_orders_histogram(item[2])
+            self.assertTrue(len(rep) > 0)
 
 if (__name__ == "__main__"):
     unittest.main()

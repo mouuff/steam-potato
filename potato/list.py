@@ -7,7 +7,7 @@ from .item import request_json
 __all__ = ["load"]
 
 
-def item_name(html):
+def html_get_item_name(html):
     '''Get item name and appid
     '''
     expr = r"href=\"{market_url}/(.*?)/(.*?)\" id=\"resultlink_"
@@ -26,23 +26,23 @@ def html_get_span(html, name):
     return (span[0])
 
 
-def html_item(html):
+def html_get_item(html):
     '''Get item information from html
     this function should be called after
     potato.parse.item_list(json_list) function
     returns a dictionary of containing item informations:
     name, appid, normal_price, sale_price, quantity
     '''
-    name, appid = item_name(html)
+    name, appid = html_get_item_name(html)
     normal_price = html_get_span(html, "normal_price")
     sale_price = html_get_span(html, "sale_price")
     quantity = html_get_span(html, "market_listing_num_listings_qty")
     info = {
-    "name": name,
-    "appid": appid,
-    "normal_price": normal_price,
-    "sale_price": sale_price,
-    "quantity": quantity
+        "name": name,
+        "appid": appid,
+        "normal_price": normal_price,
+        "sale_price": sale_price,
+        "quantity": quantity
     }
     return (info)
 
@@ -58,19 +58,20 @@ def parse_item_list(json_list):
     html_classes = re.findall(r'<a ((.|\n)*?)</a>', html)
     result = []
     for html_class in html_classes:
-        result.append(html_item(html_class[0]))
+        result.append(html_get_item(html_class[0]))
     return (result)
 
 
-def load(start, count):
+def load(start, count, appid=""):
     '''Load item list
     returns a json which contains list information
     the actual list is stored in html
     '''
     values = {
-    "start": str(start),
-    "count": str(count),
-    "format": "json"
+        "start": str(start),
+        "count": str(count),
+        "format": "json",
+        "appid": appid
     }
     json_file = request_json(LIST_URL, values)
     result = parse_item_list(json_file)
